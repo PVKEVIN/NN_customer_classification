@@ -46,6 +46,7 @@ class PeopleClassifier(nn.Module):
         self.fc2 = nn.Linear(32, 16)
         self.fc3 = nn.Linear(16, 8)
         self.fc4 = nn.Linear(8, 4)
+
     def forward(self, x):
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
@@ -57,52 +58,55 @@ class PeopleClassifier(nn.Module):
 
 ```python
 # Initialize the Model, Loss Function, and Optimizer
-model = PeopleClassifier(input_size=X_train.shape[1])
+input_size = X_train.shape[1]
+model = PeopleClassifier(input_size)
+
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(model.parameters(),lr=0.001)
-train_model(model, train_loader, criterion, optimizer, epochs=100)
+optimizer = optim.Adam(model.parameters(), lr=0.001)
+
+train_model(model, train_loader, criterion, optimizer, epochs=50)
 
 ```
 
 ```python
 #function to train the model
 def train_model(model, train_loader, criterion, optimizer, epochs):
-    model.train()
     for epoch in range(epochs):
-        for inputs, labels in train_loader:
-          optimizer.zero_grad()
-          outputs=model(inputs)
-          loss=criterion(outputs, labels)
-          loss.backward()
-          optimizer.step()
-    if (epoch + 1) % 10 == 0:
-        print(f'Epoch [{epoch+1}/{epochs}], Loss: {loss.item():.4f}')
+        model.train()
+        for X_batch, y_batch in train_loader:
+            optimizer.zero_grad()
+            outputs = model(X_batch)
+            loss = criterion(outputs, y_batch)
+            loss.backward()
+            optimizer.step()
+
+        if (epoch + 1) % 10 == 0:
+            print(f'Epoch [{epoch+1}/{epochs}], Loss: {loss.item():.4f}')
 ```
 
 ## Dataset Information
 
-<img width="1154" height="243" alt="image" src="https://github.com/user-attachments/assets/a0ea83a6-2651-4421-9785-533da43a54ce" />
+<img width="1729" height="335" alt="image" src="https://github.com/user-attachments/assets/a561b90d-b6a3-4bfb-a811-bf2f0831d326" />
+
 
 
 ## OUTPUT
 
 ### Confusion Matrix
 
-<img width="372" height="114" alt="image" src="https://github.com/user-attachments/assets/93d4d4a5-d6fd-469f-a4b0-0930ca71dad4" />
+<img width="811" height="589" alt="image" src="https://github.com/user-attachments/assets/dbd8cdf3-9b23-4204-bbef-de331c613f66" />
 
-<img width="866" height="648" alt="image" src="https://github.com/user-attachments/assets/ed2ce27d-c1e7-4814-a51d-cdc97c441399" />
 
 
 ### Classification Report
 
-<img width="1021" height="245" alt="image" src="https://github.com/user-attachments/assets/d0d7be07-06bc-4393-a206-08b5ef3263a5" />
+<img width="679" height="474" alt="image" src="https://github.com/user-attachments/assets/65a15e8e-464e-46d9-a238-2ba8dc99290c" />
 
 
 
 ### New Sample Data Prediction
 
-<img width="1671" height="103" alt="image" src="https://github.com/user-attachments/assets/57d09063-1447-4a9e-a527-71de4a92aea3" />
-
+<img width="650" height="128" alt="image" src="https://github.com/user-attachments/assets/ef8d174b-4014-41ee-93b9-9a41e7ea93ac" />
 
 
 ## RESULT
